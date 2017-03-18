@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+    <style>
+       #map {
+        height: 600px;
+        width: 100%;
+       }
+    </style>
+  </head>
+  <body>
+    <h3>My Google Maps Demo</h3>
+    <div id="map"></div>
+    <script>
+
+    var liveCameraFeedLogo = "LiveVideoFeed.jpg";
+var liveCameraFeed = liveCameraFeedLogo;
+var imageObject = null;
+
+var t=null;
+
+    function reload(obj)
+    {
+        imageObject = obj;
+        
+        if (obj.src != liveCameraFeedLogo)
+        {
+            t = setTimeout('reloadImg()',1000);
+        }        
+    };
+
+    function reloadImg()
+    {
+        var date = new Date();
+        imageObject.src = liveCameraFeed + Math.floor(date.getTime()/1000); 
+    }; 
+
+// End Live Camera Feed For This Demo Page Only 
+
+function changeText(camURL)
+{
+       
+        var userName = 'scada';
+        var password = 's2zw87kZ0N23';
+        var obj      = document.getElementById('refresh');
+        
+        if (IsEmpty(camURL))
+        {
+                // Change Camera URL On This Page to live feed logo
+                obj.src = liveCameraFeedLogo;
+                clearTimeout(t);
+        }
+        else
+        {
+                
+               // Then by checking the path entered in by user
+                obj.src = camURL + "/cgi-bin/CGIProxy.fcgi?cmd=snapPicture2&usr="+userName+"&pwd="+password+"&t=";
+                
+        }
+        liveCameraFeed = obj.src;
+}
+
+function IsEmpty(aTextField)
+{
+   if ((aTextField == null) || (aTextField.length == 0))
+   {
+      return true;
+   }
+   else
+   {
+      return false;
+   }
+}
+
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 13,
+          center: {lat:10.845514 ,lng:106.638217}
+        });
+        var markers = [];
+        //quang trung
+        markers.push({
+          position:{lat:10.845514 ,lng:106.638217},
+          url:'http://gr5094.myfoscam.org:88'
+        });
+        //duong van cam
+        markers.push({
+          position:{lat:10.850355 ,lng:106.752583},
+          url:'http://iw9132.myfoscam.org:88'
+        });
+        //truong vinh ky
+        markers.push({
+          position:{lat:10.794323,lng:106.630453},
+          url:'http://gn3290.myfoscam.org:88'
+        });
+        //le duc tho
+        markers.push({
+          position:{lat:10.841656 ,lng:106.677045},
+          url:'http://gr5323.myfoscam.org:88'
+        });
+        // nguyen van qua
+        markers.push({
+          position:{lat:10.840185 ,lng:106.630057},
+          url:'http://gr5444.myfoscam.org:88'
+        });
+      
+        var infowindow = new google.maps.InfoWindow({});
+          markers.forEach(function(value,index){
+            var maker = new google.maps.Marker({
+              position: value.position,
+              map: map
+            });
+
+            maker.addListener('click', function() {
+              infowindow.setContent("<img src='LiveVideoFeed.jpg' name='refresh' id='refresh' onload='reload(this)' onerror='reload(this)'>");
+              
+              infowindow.open(map, maker);
+              changeText(value.url)
+            });
+
+        });
+    //     quangtrung.addListener('click', function() {
+	   //      infowindow.setContent("<img src='http://gr5094.myfoscam.org:88/cgi-bin/CGIProxy.fcgi?cmd=snapPicture2&usr=scada&pwd=s2zw87kZ0N23&t=' name='refresh' id='refresh' onload='reload(this)' onerror='reload(this)'>");
+		  //   infowindow.open(map, quangtrung);
+		  // });
+
+
+        /*duongvancam.addListener('click', function() {
+	        infowindow.setContent('<img src="http://iw9132.myfoscam.org:88/cgi-bin/CGIProxy.fcgi?cmd=snapPicture2&usr=scada&pwd=s2zw87kZ0N23&t=" name="refresh" id="refresh" onload='reload(this)' onerror='reload(this,'iw9132.myfoscam.org')'>');
+		    infowindow.open(map, duongvancam);
+		  });
+
+        truongvinhky.addListener('click', function() {
+	        infowindow.setContent('<img src="http://gn3290.myfoscam.org:88/cgi-bin/CGIProxy.fcgi?cmd=snapPicture2&usr=scada&pwd=s2zw87kZ0N23&t=" name="refresh" id="refresh" onload='reload(this)' onerror='reload(this,'gn3290.myfoscam.org')'>');
+		    infowindow.open(map, truongvinhky);
+		  });
+
+        leductho.addListener('click', function() {
+	        infowindow.setContent('<img src="http://gr5323.myfoscam.org:88/cgi-bin/CGIProxy.fcgi?cmd=snapPicture2&usr=scada&pwd=s2zw87kZ0N23&t=" name="refresh" id="refresh" onload='reload(this)' onerror='reload(this,'gr5323.myfoscam.org')'>');
+		    infowindow.open(map, leductho);
+		  });
+
+        nguyenvanqua.addListener('click', function() {
+	        infowindow.setContent('<img src="http://gr5444.myfoscam.org:88/cgi-bin/CGIProxy.fcgi?cmd=snapPicture2&usr=scada&pwd=s2zw87kZ0N23&t=" name="refresh" id="refresh" onload='reload(this)' onerror='reload(this,'gr5444.myfoscam.org')'>');
+		    infowindow.open(map, nguyenvanqua);
+		  });
+
+        calmette.addListener('click', function() {
+	        infowindow.setContent('<img src="http://gr5498.myfoscam.org:88/cgi-bin/CGIProxy.fcgi?cmd=snapPicture2&usr=scada&pwd=s2zw87kZ0N23&t=" name="refresh" id="refresh" onload='reload(this)' onerror='reload(this,'gr5498.myfoscam.org')'>');
+		    infowindow.open(map, calmette);
+		  });
+
+        huynhtanphat.addListener('click', function() {
+	        infowindow.setContent('<img src="http://gn3222.myfoscam.org:88/cgi-bin/CGIProxy.fcgi?cmd=snapPicture2&usr=scada&pwd=s2zw87kZ0N23&t=" name="refresh" id="refresh" onload='reload(this)' onerror='reload(this,'gn3222.myfoscam.org')'>');
+		    infowindow.open(map, huynhtanphat);
+		  });
+
+        phananh.addListener('click', function() {
+	        infowindow.setContent('<img src="http://gr5342.myfoscam.org:88/cgi-bin/CGIProxy.fcgi?cmd=snapPicture2&usr=scada&pwd=s2zw87kZ0N23&t=" name="refresh" id="refresh" onload='reload(this)' onerror='reload(this,'gr5342.myfoscam.org')'>');
+		    infowindow.open(map, phananh);
+		  });
+
+        godau.addListener('click', function() {
+	        infowindow.setContent('<img src="http://gr5132.myfoscam.org:88/cgi-bin/CGIProxy.fcgi?cmd=snapPicture2&usr=scada&pwd=s2zw87kZ0N23&t=" name="refresh" id="refresh" onload='reload(this)' onerror='reload(this,'gr5132.myfoscam.org')'>');
+		    infowindow.open(map, godau);
+		  });
+
+        baucat.addListener('click', function() {
+	        infowindow.setContent('<img src="http://gn3330.myfoscam.org:88/cgi-bin/CGIProxy.fcgi?cmd=snapPicture2&usr=scada&pwd=s2zw87kZ0N23&t=" name="refresh" id="refresh" onload='reload(this)' onerror='reload(this,'gn3330.myfoscam.org')'>');
+		    infowindow.open(map, baucat);
+		  });*/
+
+       }
+
+
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDX2PQyzKw5iyGddtXBQTA_fIyux0bZ8sU&callback=initMap">
+    </script>
+  </body>
+</html>
